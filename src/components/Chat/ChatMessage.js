@@ -1,5 +1,4 @@
 import React from 'react';
-import { FaUser, FaRobot } from 'react-icons/fa';
 import ReactMarkdown from 'react-markdown';
 import './ChatMessage.css';
 
@@ -9,9 +8,6 @@ const ChatMessage = ({ message }) => {
 
   return (
     <div className={`chat-message ${isUser ? 'user' : 'assistant'}`}>
-      <div className="avatar">
-        {isUser ? <FaUser /> : <FaRobot />}
-      </div>
       <div className="message-content">
         {isUser ? (
           // User messages as plain text

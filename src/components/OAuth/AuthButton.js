@@ -63,7 +63,7 @@ const AuthButton = ({ onAuthSuccess, onAuthError }) => {
           disabled={loading}
           className="auth-button login-button"
         >
-          {loading ? 'Connecting...' : 'Connect Google Calendar'}
+          {loading ? 'Signing in...' : 'Sign in with Google'}
         </button>
       ) : (
         <div className="auth-status">

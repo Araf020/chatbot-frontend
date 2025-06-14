@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FaPlus } from 'react-icons/fa';
 import ChatWindow from './ChatWindow';
 import ChatInput from './ChatInput';
 import ConversationHistory from './ConversationHistory';
@@ -14,6 +15,7 @@ const ChatContainer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [calendarService] = useState(new CalendarService());
   const [isCalendarConnected, setIsCalendarConnected] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   
   // System prompt for the assistant
   const systemPrompt = 'You are a helpful, friendly, and knowledgeable assistant powered by the Llama 3.3 70B model. You provide thoughtful, accurate responses while being conversational and engaging. If you\'re not sure about something, be honest about your limitations. You can also help with Google Calendar tasks when the user has connected their calendar.';
@@ -104,9 +106,10 @@ const ChatContainer = () => {
     return calendarData.response;
   };
 
-  const handleAuthSuccess = ({ accessToken, refreshToken }) => {
+  const handleAuthSuccess = ({ accessToken, refreshToken, userInfo }) => {
     calendarService.setTokens(accessToken, refreshToken);
     setIsCalendarConnected(true);
+    setUserInfo(userInfo);
   };
 
   const handleAuthError = (error) => {
@@ -128,18 +131,12 @@ const ChatContainer = () => {
     }
   };
   
-  // Function to clear the current conversation
-  const clearConversation = () => {
-    if (window.confirm('Are you sure you want to clear the current conversation?')) {
-      setMessages([]);
-    }
-  };
 
   return (
     <div className="chat-container">
       <div className="chat-header">
         <div className="header-top">
-          <h2>AI Chat Assistant</h2>
+          <h2>AI Assistant</h2>
           <AuthButton 
             onAuthSuccess={handleAuthSuccess}
             onAuthError={handleAuthError}
@@ -154,31 +151,12 @@ const ChatContainer = () => {
       
       <ChatWindow messages={messages} isLoading={isLoading} />
       
-      <div className="chat-actions">
-        {messages.length > 0 ? (
-          <>
-            <button 
-              className="new-chat-btn" 
-              onClick={startNewChat}
-              title="Start a new chat"
-            >
-              New Chat
-            </button>
-            <button 
-              className="clear-chat-btn" 
-              onClick={clearConversation}
-              title="Clear conversation"
-            >
-              Clear Chat
-            </button>
-          </>
-        ) : (
-          <div className="welcome-message">
-            <h3>Welcome to AI Chat Assistant</h3>
-            <p>Start a conversation by typing a message below.</p>
-          </div>
-        )}
-      </div>
+      {messages.length === 0 && (
+        <div className="welcome-message">
+          <h3>Welcome to AI Assistant</h3>
+          <p>Start a conversation by typing a message below.</p>
+        </div>
+      )}
       
       <ChatInput onSendMessage={sendMessage} isLoading={isLoading} showSuggestions={true} />
     </div>
